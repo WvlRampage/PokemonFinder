@@ -142,6 +142,17 @@ export const Home: React.FC = () => {
       />
       {loading && pokemons.length === 0 ? (
         <ActivityIndicator size="large" color="#0000ff" />
+      ) : filteredPokemons.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Image
+            source={{ uri: 'https://i.imgur.com/ctjQ5Z8.png' }} 
+            style={styles.emptyImage}
+          />
+          <Text style={styles.emptyText}>No Pokémon found!</Text>
+          <Text style={styles.emptySubText}>
+            Try searching for a different Pokémon name.
+          </Text>
+        </View>
       ) : (
         <FlatList
           data={filteredPokemons}
@@ -189,4 +200,26 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     height: 100,
   }, 
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  emptyImage: {
+    width: 200,
+    height: 200,
+    resizeMode:'contain',
+    marginBottom: 20,
+  },
+  emptyText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#ff4d4d',
+    marginBottom: 10,
+  },
+  emptySubText: {
+    fontSize: 16,
+    color: '#888',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
 });

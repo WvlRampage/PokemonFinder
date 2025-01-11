@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "start:ios": "npx react-native run-ios --simulator='iPhone 15 Pro Max (3B45063E-E342-4D09-8035-EB73F133C830)'",
+    "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest"
