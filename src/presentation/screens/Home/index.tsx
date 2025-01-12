@@ -18,6 +18,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { globalStyles } from '../../themes/global.styles';
 import { styles } from './Home.styles';
 
+const BASE_URL = 'https://pokeapi.co/api/v2/';
+
 type Pokemon = {
   name: string;
   url: string;
@@ -40,22 +42,34 @@ export const Home: React.FC = () => {
 
   const navigation = useNavigation<NativeStackNavigationProp<StackParamList>>();
 
-  const fetchPokemons = async () => {
+  const fetchPokemons = async (name?: string) => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `https://pokeapi.co/api/v2/pokemon?limit=10&offset=${(page - 1) * 10}`
-      );
-      const detailedData = await Promise.all(
-        response.data.results.map(async (pokemon: Pokemon) => {
-          const details = await axios.get(pokemon.url);
-          return details.data as DetailedPokemon;
-        })
-      );
-      setPokemons((prev) => [...prev, ...detailedData]);
-      setFilteredPokemons((prev) => [...prev, ...detailedData]);
+      let response;
+      // If a name is provided, fetch the specific Pokémon
+      if (name) {
+        response = await axios.get(`${BASE_URL}pokemon/${searchQuery.toLowerCase()}`);
+        // Transform the single Pokémon data to match the expected structure
+        const detailedData = [response.data as DetailedPokemon];
+        setPokemons((prev) => [...prev, ...detailedData]);
+        setFilteredPokemons(detailedData); // Update the filtered list
+      } else {
+        // Fetch a list of Pokémon with pagination
+        response = await axios.get(`${BASE_URL}pokemon?limit=10&offset=${(page - 1) * 10}`);
+        const detailedData = await Promise.all(
+          response.data.results.map(async (pokemon: Pokemon) => {
+            const details = await axios.get(pokemon.url);
+            return details.data as DetailedPokemon;
+          })
+        );
+        setPokemons((prev) => [...prev, ...detailedData]);
+        setFilteredPokemons((prev) => [...prev, ...detailedData]);
+      }
     } catch (error) {
-      console.error('Failed to fetch Pokémon:', error);
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        // Handle Pokémon not found error
+        setFilteredPokemons([]);
+      }
     } finally {
       setLoading(false);
     }
@@ -93,7 +107,10 @@ export const Home: React.FC = () => {
     const matchedPokemons = pokemons.filter((pokemon) =>
       pokemon.name.toLowerCase().includes(lowerCaseQuery)
     );
-
+  
+    if (matchedPokemons.length === 0) {
+      fetchPokemons('searchPokemon')
+    }
     setFilteredPokemons(matchedPokemons);
   }, 300);
 
@@ -145,7 +162,7 @@ export const Home: React.FC = () => {
       ) : filteredPokemons.length === 0 ? (
         <View style={styles.emptyContainer}>
           <Image
-            source={{ uri: 'https://i.imgur.com/ctjQ5Z8.png' }} 
+            source={{ uri: 'https://i.imgur.com/ctjQ5Z8.png' }}
             style={styles.emptyImage}
           />
           <Text style={styles.emptyText}>No Pokémon found!</Text>
