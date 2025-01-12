@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, ImageBackground } from 'react-native';
-
+import { View, Text, TextInput, Alert, ImageBackground } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PrimaryButton } from '../components';
-import { globalStyles } from '../themes/global.styles';
+import { PrimaryButton } from '../../components';
+import { globalStyles } from '../../themes/global.styles';
+import { styles } from './Login.styles';
 
 type LoginProps = {
   navigation: {
@@ -40,7 +40,7 @@ export const Login: React.FC<LoginProps> = ({ navigation }) => {
   };
 
   return (    
-    <ImageBackground source={require('../../../assets/images/pika.jpg')} style={styles.bgContainer}>  
+    <ImageBackground source={require('../../../../assets/images/pika.jpg')} style={styles.bgContainer}>  
       <View style={styles.titleContainer}>
         <Text style={globalStyles.title}>Pokemon Finder</Text>
       </View>
@@ -68,29 +68,3 @@ export const Login: React.FC<LoginProps> = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
-  bgContainer:{
-    flex: 1,
-  },
-  container: {
-    flex: 2.7,
-    padding: 16,
-  },
-  titleContainer:{
-    flex:1,
-    marginTop:20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
-    textAlign: 'center',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 8,
-    marginBottom: 16,
-    borderRadius: 4,
-  },
-});

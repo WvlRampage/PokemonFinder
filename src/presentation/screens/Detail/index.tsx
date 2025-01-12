@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Image } from 'react-native';
+import { View, Text, ActivityIndicator, Image } from 'react-native';
 import axios from 'axios';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { StackParamList } from '../navigation/StackNavigator';
-import { globalStyles } from '../themes/global.styles';
+import { StackParamList } from '../../navigation/StackNavigator';
+import { globalStyles } from '../../themes/global.styles';
+import { styles } from './Detail.styles';
 
 type DetailScreenProps = NativeStackScreenProps<StackParamList, 'Detail'>;
 
@@ -49,33 +50,3 @@ export const Detail: React.FC<DetailScreenProps> = ({ route }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    textTransform: 'capitalize',
-    marginBottom: 16,
-  },
-  image: {
-    width: 150,
-    height: 150,
-    marginBottom: 16,
-  },
-  info: {
-    fontSize: 18,
-    marginBottom: 8,
-  },
-});
